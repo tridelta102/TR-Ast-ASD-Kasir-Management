@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+int menuKasir(){
+    printf("Selamat datang di menu kasir\n");
+    printf("");
+}
 int main() {
     int pilihanInt = 0;
     int validasi = 0;

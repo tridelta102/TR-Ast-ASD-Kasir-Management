@@ -50,7 +50,7 @@
 
 
     void tampilkategori(char x[10]){
-        printf("====================================== KOPDES DESA ======================================\n");
+        printf("====================================== KOPERASI DESA ======================================\n");
         printf("| Kode\t| Nama Produk                    | Kategori\t| Harga\t\t| Jumlah Stok \t|\n");
         for(int i = 0; i < length; i++){
             if(produk[i].id[0] != '\0' && strcmp(produk[i].kategori, x) == 0){

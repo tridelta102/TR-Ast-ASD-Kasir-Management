@@ -11,6 +11,7 @@
     };
 
     /* tambahi lagi/ganti dong produknya -teo*/
+    /* Buat datanya mending di csv aja, biar bisa diedit, tambah atau hapus*/
     struct item produk[20] = {
         {"T001", "Beras 5 Kg", "Komoditas", 80000, 5},
         {"T002", "Telur 1 Lusin", "Komoditas", 20000, 8},

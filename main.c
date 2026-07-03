@@ -3,7 +3,7 @@
 #include <string.h>
 
 int barangTambahAtauHapus(){
-
+    
 }
 
 int menuDatabase(){
@@ -75,8 +75,7 @@ int main() {
             system("cls");
             printf("Mohon maaf, pilihan tersebut tidak ada.\n");
             break;
-        }
-        
+        }  
     } while (pilihanInt != 99);
     
 }

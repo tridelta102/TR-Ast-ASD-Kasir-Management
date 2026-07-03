@@ -12,29 +12,14 @@ int menuDatabase(){
     int validasi = 0;
     do
     {
-        do
-        {
-            printf("Selamat datang di menu database\n");
-            printf("Silahkan pilih : \n");
-            printf("1. Tambah/Hapus barang\n");
-            printf("2. Tampilkan barang\n");
-            printf("99. Kembali ke menu utama\n");
-            printf("Pilihanmu : ");
-            fgets(pilihanChar, sizeof(pilihanChar), stdin);
-            pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
-                if (pilihanChar[0] == '\0')
-                {
-                    system("cls");
-                    printf("Pilihan tidak boleh kosong!\n");
-                } else if(strspn(pilihanChar, "0123456789") != strlen(pilihanChar)){
-                    system("cls");
-                    printf("Pilihan harus dalam bentuk angka!\n");
-                } else {
-                    validasi = 1;
-                }
-        } while (validasi != 1);
+        printf("Selamat datang di menu database\n");
+        printf("Silahkan pilih : \n");
+        printf("1. Tambah/Hapus barang\n");
+        printf("2. Tampilkan barang\n");
+        printf("99. Kembali ke menu utama\n");
+        printf("Pilihanmu : ");
+        fgets(pilihanChar, sizeof(pilihanChar), stdin);
         pilihanInt = atoi(pilihanChar);
-        validasi = 0;
         switch (pilihanInt)
         {
         case 1:
@@ -47,7 +32,6 @@ int menuDatabase(){
             printf("%d\n", pilihanInt);
             printf("Kembali ke menu utama . . . \n");
             break;
-        
         default:
             system("cls");
             printf("%d\n", pilihanInt);
@@ -68,28 +52,13 @@ int main() {
     system("cls");
     do
     {
-        do
-        {
         printf("Selamat datang di sistem supermarket!\n");
         printf("Silahkan pilih yang ingin anda lakukan:\n");
         printf("1. Masuk menu kasir\n");
         printf("2. Cek database\n");
         printf("99. Keluar\n");
-            printf("Pilihan anda : ");
-            fgets(pilihanChar, sizeof(pilihanChar), stdin);
-            pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
-            if (pilihanChar[0] == '\0')
-            {
-                system("cls");
-                printf("Pilihan tidak boleh kosong!\n");
-            } else if(strspn(pilihanChar, "0123456789") != strlen(pilihanChar)){
-                system("cls");
-                printf("Pilihan harus dalam bentuk angka!\n");
-            } else {
-                validasi = 1;
-            }
-        } while (validasi != 1);
-        validasi = 0;
+        printf("Pilihan anda : ");
+        fgets(pilihanChar, sizeof(pilihanChar), stdin);
         pilihanInt = atoi(pilihanChar);
         switch (pilihanInt)
         {

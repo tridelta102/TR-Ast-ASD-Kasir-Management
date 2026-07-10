@@ -34,7 +34,6 @@ int main();
     int keranjang[2][10];
     int z = 0;
 
-
 int validasiIsi(char inputChar[]){
     if(inputChar[0] == '\0'){
         printf("Tidak boleh kosong!\n");
@@ -59,12 +58,13 @@ int validasiInteger(char inputChar[], int *outputInteger){
         int input, j;
 
         printf("\nMasukkan ID Produk: ");
-        scanf(" %[^\n]", cari);
+        scanf(" %4[^\n]", cari);
 
         for(int i = 0; i < length; i++){
             if(strcmp(cari,produk[i].id) == 0){
                 printf("Masukkan Jumlah: ");
                 scanf("%d", &j);
+                while (getchar() != '\n'); 
                 if(produk[i].kuan >= j){
                     keranjang[0][z] = i;
                     keranjang[1][z] = j;
@@ -108,78 +108,67 @@ int validasiInteger(char inputChar[], int *outputInteger){
         return 0;
     };
 
-    int beli(){
-        int input;
-        printf("====================================== KERANJANG ANDA ======================================\n");
-        printf("| Kode\t| Nama Produk                    | Harga Satuan\t\t| Jumlah \t| Total\t|\n");
-        for(int i = 0; i < 10; i++){
-            if(keranjang[0][i] != 0){
-            printf("| %-5s | %-30s | Rp %d\t\t| %d\t| Rp %d\t|\n", produk[keranjang[0][i]].id, produk[keranjang[0][i]].nama, produk[keranjang[0][i]].harga, keranjang[1][i], produk[keranjang[0][i]].harga*keranjang[1][i]);
-            };
-        };
-        printf("============================================================================================\n");
-        printf("0 - Kembali\n1 - Konfirmasi Beli\nPilih : ");
-        scanf("%d", &input);
-        switch(input){
-            case 0:
-            menuKasir();
+int beli(){
+    int input;
+    printf("====================================== KERANJANG ANDA ======================================\n");
+    printf("| %-5s | %-30s | %-15s | %-7s | %-12s |\n", "Kode", "Nama Produk", "Harga Satuan", "Jumlah", "Total");
+    printf("--------------------------------------------------------------------------------------------\n");
+    
+    for(int i = 0; i < 10; i++){
+        if(keranjang[0][i] != -1){
+            int idx = keranjang[0][i];
+            printf("| %-5s | %-30s | Rp %-12d | %-7d | Rp %-9d |\n", 
+                   produk[idx].id, produk[idx].nama, produk[idx].harga, keranjang[1][i], produk[idx].harga * keranjang[1][i]);
+        }
+    }
+    printf("============================================================================================\n");
+    printf("0 - Kembali\n1 - Konfirmasi Beli\nPilih : ");
+    scanf("%d", &input);
+    while (getchar() != '\n');
+
+    switch(input){
+        case 0:
             break;
 
-            case 1:
+        case 1:
             printf("Yakin Beli? (1 - Ya / 0 - Tidak): ");
             scanf("%d", &input);
-                switch(input){
-                    case 0:
-                    menuKasir();
-                    break;
-
-                    case 1:
-                    for(int i = 0; i < 10; i++){
-                        if(keranjang[0][i] != 0){
-                            produk[keranjang[0][i]].kuan -= keranjang[1][i];
-                            keranjang[0][i] = 0;
-                            keranjang[1][i] = 0;
-                        };
-                    };
-
-                    printf("Pembelian Berhasil! Tekan Enter untuk kembali...");
-                        while (getchar() != '\n'); 
-                        getchar();
-                        menuKasir();
-                    break;
-                    
-                    default:
-                        printf("ERROR: Angka yang anda masukkan tidak sesuai. Tekan Enter untuk Coba lagi...");
-                        while (getchar() != '\n'); 
-                        getchar();
-                        beli();
-                        break;
+            while (getchar() != '\n');
+            
+            if(input == 1){
+                for(int i = 0; i < 10; i++){
+                    if(keranjang[0][i] != -1){
+                        produk[keranjang[0][i]].kuan -= keranjang[1][i];
+                        keranjang[0][i] = -1;
+                        keranjang[1][i] = 0;
+                    }
                 }
-            break;
-
-            default:
-                printf("ERROR: Angka yang anda masukkan tidak sesuai. Tekan Enter untuk Coba lagi...");
-                while (getchar() != '\n'); 
+                z = 0;
+                printf("Pembelian Berhasil! Tekan Enter untuk kembali...");
                 getchar();
-                beli();
-                break;
-        }
-        return 0;
+            }
+            break;
+            
+        default:
+            printf("Pilihan tidak sesuai. Tekan Enter untuk kembali...\n");
+            getchar();
+            break;
     }
+    return 0;
+}   
 
-    void tampilkategori(char x[10]){
-        printf("====================================== KOPERASI DESA ======================================\n");
-        printf("| Kode\t| Nama Produk                    | Kategori\t| Harga\t\t| Jumlah Stok \t|\n");
-        for(int i = 0; i < length; i++){
-            if(produk[i].id[0] != '\0' && strcmp(produk[i].kategori, x) == 0){
-            printf("| %-5s | %-30s | %s\t| Rp %d\t| %d\t\t|\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
-            };
-        };
-        printf("========================================================================================\n\n");
-         printf("Tekan Enter untuk kembali ke menu...");
-        while (getchar() != '\n'); 
-        getchar();
-    };
+ void tampilkategori(char x[10]){
+    printf("====================================== KOPERASI DESA ======================================\n");
+    printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
+    for(int i = 0; i < length; i++){
+        if(produk[i].id[0] != '\0' && strcmp(produk[i].kategori, x) == 0){
+            printf("| %-5s | %-30s | %-8s | Rp %-6d | %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
+        }
+    }
+    printf("========================================================================================\n\n");
+    printf("Tekan Enter untuk kembali...");
+    getchar();
+}
 
 int tampilbarang(){
     int input;
@@ -187,80 +176,48 @@ int tampilbarang(){
     printf("\n1 - Lihat Semua\n");
     printf("2 - Lihat Berdasarkan Kategori\n");
     printf("0 - Kembali Ke Menu Utama\n");
-    printf("Pilih (0-1) : ");
+    printf("Pilih (0-2) : ");
     scanf("%d", &input);
+    while (getchar() != '\n');
 
-    
     switch(input){
         case 1:
             printf("====================================== KOPDES DESA ======================================\n");
-            printf("| Kode\t| Nama Produk                    | Kategori\t| Harga\t\t| Jumlah Stok \t|\n");
+            printf("| Kode  | Nama Produk                    | Kategori \t| Harga     | Jumlah Stok  |\n");
             for(int i = 0; i < length; i++){
                 if(produk[i].id[0] != '\0'){
-                printf("| %-5s | %-30s | %s\t| Rp %d\t| %d\t\t|\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
-                };
-            };
+                    printf("| %-5s | %-30s | %-8s | Rp %-6d \t| %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
+                }
+            }
             printf("========================================================================================\n");
-            printf("Tekan Enter untuk kembali ke menu...");
-            while (getchar() != '\n'); 
+            printf("Tekan Enter untuk kembali...");
             getchar();
             system("cls");
-            menuDatabase();
             break;
 
         case 2:
-                printf("\n1 - Komoditas\n");
-                printf("2 - Minuman\n");
-                printf("3 - Snack\n");
-                printf("0 - Kembali\n");
-                printf("Pilih (0-3) : ");
-                scanf("%d", &input);
-                
-                switch(input){
-                    case 1:
-                    strcpy(cek, "Komoditas");
-                    tampilkategori(cek);
-                    menuDatabase();
-                    break;
+            printf("\n1 - Komoditas\n");
+            printf("2 - Minuman\n");
+            printf("3 - Snack\n");
+            printf("0 - Kembali\n");
+            printf("Pilih (0-3) : ");
+            scanf("%d", &input);
+            while (getchar() != '\n');
+            
+            switch(input){
+                case 1: tampilkategori("Komoditas"); break;
+                case 2: tampilkategori("Minuman"); break;
+                case 3: tampilkategori("Snack"); break;
+                default: break;
+            }
+            system("cls");
+            break;
 
-                    case 2:
-                    strcpy(cek, "Minuman");
-                    tampilkategori(cek);
-                    menuDatabase();
-                    break;
-
-                    case 3:
-                    strcpy(cek, "Snack");
-                    tampilkategori(cek);
-                    menuDatabase();
-                    break;
-
-                    case 0:
-                    menuDatabase();
-                    break;
-
-                    default:
-                    printf("ERROR: Angka yang anda masukkan tidak sesuai. Tekan Enter untuk Coba lagi...");
-                    while (getchar() != '\n'); 
-                    getchar();
-                    tampilbarang();
-                    break;
-                };
-                break;
-
-                case 0:
-                    menuDatabase();
-                    break;
-
-                default:
-                    printf("ERROR: Angka yang anda masukkan tidak sesuai. Tekan Enter untuk Coba lagi...");
-                    while (getchar() != '\n'); 
-                    getchar();
-                    tampilbarang();
-                    break;
-        };
-        return 0;
-};
+        default:
+            break;
+    }
+    return 0; 
+}
 
 int tambahBarang(){
     char pilihanChar[10], hargaChar[50], stokChar[20], kode[10], nama[100], kategori[20];
@@ -406,43 +363,50 @@ int menuDatabase(){
 }
 
 int menuKasir(){
-    system("cls");
-    printf("Selamat datang di menu kasir\n");
     int input;
-    char cek[10];
-    printf("1 - Tambahkan Keranjang\n");
-    printf("2 - Lihat dan Konfirmasi Beli\n");
-    printf("0 - Kembali Ke Menu Utama\n");
-    printf("Pilih (0-1) : ");
-    scanf("%d", &input);
+    do {
+        system("cls");
+        printf("Selamat datang di menu kasir\n");
+        printf("1 - Tambahkan Keranjang\n");
+        printf("2 - Lihat dan Konfirmasi Beli\n");
+        printf("99 - Kembali Ke Menu Utama\n");
+        printf("Pilih : ");
+        scanf("%d", &input);
+        while (getchar() != '\n');
 
-    switch(input){
-        case 1:
-        tambahkeranjang();
-        break;
-        
-        case 2:
-        beli();
-        break;
+        switch(input){
+            case 1:
+                tambahkeranjang();
+                break;
+            
+            case 2:
+                beli();
+                break;
 
-        case 0:
-        main();
-        break;
+            case 99:
+                printf("Kembali ke menu utama . . . \n");
+                break;
 
-        default:
-            printf("ERROR: Angka yang anda masukkan tidak sesuai. Tekan Enter untuk Coba lagi...");
-            while (getchar() != '\n'); 
-            getchar();
-            menuKasir();
-        break;
-    };
-};
+            default:
+                printf("ERROR: Angka tidak sesuai. Tekan Enter untuk Coba lagi...");
+                getchar();
+                break;
+        }
+    } while (input != 99); 
+    
+    return 0;
+}
 
 int main() {
     int pilihanInt = 0;
     int validasi = 0;
     char pilihanChar[10];
     system("cls");
+
+    for(int i = 0; i < 10; i++){
+        keranjang[0][i] = -1;
+        keranjang[1][i] = 0;
+    };
 
     do
     {

@@ -3,6 +3,8 @@
 #include <string.h>
 int menuDatabase();
 int menuKasir();
+/* ===== {NTAN} TAMBAHAN FITUR STRUK BELANJA ===== */
+void cetakStruk();
 int main();
 
     struct item{
@@ -138,6 +140,7 @@ int beli(){
             while (getchar() != '\n');
             
             if(input == 1){
+                cetakStruk();
                 for(int i = 0; i < 10; i++){
                     if(keranjang[0][i] != -1){
                         produk[keranjang[0][i]].kuan -= keranjang[1][i];
@@ -146,8 +149,6 @@ int beli(){
                     }
                 }
                 z = 0;
-                printf("Pembelian Berhasil! Tekan Enter untuk kembali...");
-                getchar();
             }
             break;
             
@@ -207,10 +208,20 @@ int tampilbarang(){
             while (getchar() != '\n');
             
             switch(input){
-                case 1: tampilkategori("Komoditas"); break;
-                case 2: tampilkategori("Minuman"); break;
-                case 3: tampilkategori("Snack"); break;
-                default: break;
+                case 1: 
+                tampilkategori("Komoditas"); 
+                break;
+
+                case 2: 
+                tampilkategori("Minuman"); 
+                break;
+
+                case 3: 
+                tampilkategori("Snack"); 
+                break;
+
+                default: 
+                break;
             }
             system("cls");
             break;
@@ -415,7 +426,6 @@ int hapusBarang(){
     } while (pilihanInt != 0);
     
 }
-/* CATATAN :  HANYA FUNGSI SEMENTARA SAJA*/
 int tampilBarangSementara (){
     system("cls");
     printf("Menampilkan barang-barang\n");
@@ -469,6 +479,49 @@ int menuDatabase(){
         } while (pilihanInt != 99);
 }
 
+
+/* ===== {NTAN} TAMBAHAN BARU: FUNGSI CETAK STRUK KE FILE struk.txt ===== */
+void cetakStruk(){
+    FILE *fp = fopen("struk.txt", "w");
+
+    if(fp == NULL){
+        printf("Gagal membuat file struk!\n");
+        return;
+    }
+
+    int totalBelanja = 0;
+
+    fprintf(fp, "================ STRUK BELANJA ===============\n");
+    fprintf(fp, "%-5s %-25s %-5s %-10s\n", "Kode", "Nama", "Qty", "Total");
+    fprintf(fp, "----------------------------------------------\n");
+
+    for(int i = 0; i < z; i++){
+        int idx = keranjang[0][i];
+
+        if(idx != -1){
+            int subtotal = produk[idx].harga * keranjang[1][i];
+
+            fprintf(fp, "%-5s %-25s %-5d Rp %-8d\n",
+                    produk[idx].id,
+                    produk[idx].nama,
+                    keranjang[1][i],
+                    subtotal);
+
+            totalBelanja += subtotal;
+        }
+    }
+
+    fprintf(fp, "----------------------------------------------\n");
+    fprintf(fp, "TOTAL BELANJA : Rp %d\n", totalBelanja);
+
+    fclose(fp);
+
+    printf("Struk berhasil dibuat: struk.txt\n");
+    printf("Tekan Enter untuk kembali...");
+    getchar();
+}
+
+
 int menuKasir(){
     int input;
     do {
@@ -476,6 +529,7 @@ int menuKasir(){
         printf("Selamat datang di menu kasir\n");
         printf("1 - Tambahkan Keranjang\n");
         printf("2 - Lihat dan Konfirmasi Beli\n");
+        /* ===== TAMBAHAN BARU: MENU CETAK STRUK ===== */
         printf("99 - Kembali Ke Menu Utama\n");
         printf("Pilih : ");
         scanf("%d", &input);

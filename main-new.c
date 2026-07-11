@@ -231,13 +231,22 @@ int tambahBarang(){
         {
             do
             {
-                printf("Masukkan Kode : ");
-                fgets(kode, sizeof(kode), stdin);
-                kode[strcspn(kode, "\n")] = '\0';
-                if(!validasiIsi(kode)){
-                    break;
+                do
+                {
+                    printf("Masukkan Kode : ");
+                    fgets(kode, sizeof(kode), stdin);
+                    kode[strcspn(kode, "\n")] = '\0';
+                } while (!validasiIsi(kode));
+                for (int i = 0; i < length; i++)
+                {
+                    if (strcmp(produk[i].id, kode) == 0)
+                    {
+                        printf("Kode sudah dipakai, Gunakan kode lain.\n");
+                        validasi = 0;
+                    }  
                 }
-            } while (!validasiIsi(kode));
+            } while (validasi != 1);
+            
             do
             {
                 printf("Masukkan Nama : ");
@@ -372,7 +381,6 @@ int hapusBarang(){
         for(int i=index; i<length-1; i++) {
             produk[i] = produk[i+1];
         }
-        length--;
         printf("Barang berhasil di hapus!\n");
         validasi = 0;
         do
@@ -407,6 +415,18 @@ int hapusBarang(){
     } while (pilihanInt != 0);
     
 }
+/* CATATAN :  HANYA FUNGSI SEMENTARA SAJA*/
+int tampilBarangSementara (){
+    system("cls");
+    printf("Menampilkan barang-barang\n");
+    printf("================================ BARANG ========================================\n");
+    printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
+    for (int i = 0; i < length; i++)
+    {
+        printf("| %-5s | %-30s | %-8s | Rp %-6d \t| %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
+    }
+    printf("====================================================================================\n");
+}
 
 int menuDatabase(){
     int pilihanInt;
@@ -435,7 +455,7 @@ int menuDatabase(){
             break;
         case 3:
             system("cls");
-            tampilbarang();
+            tampilBarangSementara();
             break;
         case 99:
             system("cls");

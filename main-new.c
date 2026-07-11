@@ -268,7 +268,7 @@ int tambahBarang(){
                 fgets(kuanChar, sizeof(kuanChar), stdin);
                 kuanChar[strcspn(kuanChar, "\n")] = '\0';
             } while (!validasiInteger(kuanChar, &kuanInt));
-            
+            system("cls");
             printf("Silahkan Cek ulang data yang anda isi :\n");
             printf("====================================== BARANG ======================================\n");
             printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
@@ -282,7 +282,9 @@ int tambahBarang(){
                 fgets(pilihanChar, sizeof(pilihanChar), stdin);
                 pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
             } while (!validasiInteger(pilihanChar, &pilihanInt));
+            system("cls");
         } while (pilihanInt != 1); 
+
         for (int i = 0; i < length; i++)
         {
             if (produk[i].id[0] == '\0'){
@@ -297,7 +299,9 @@ int tambahBarang(){
             }
         }
         if (!ditemukan){
-            printf("Penyimpnanan sudah penuh\n");
+            system("cls");
+            printf("Penyimpanan sudah penuh, kembali ke menu utama\n");
+            return 0;
         }
         do
         {
@@ -333,24 +337,73 @@ int tambahBarang(){
 
 int hapusBarang(){
     char pilihanChar[10], kode[10];
-    int pilihanInt, validasi = 0;
+    int pilihanInt, validasi = 0, ditemukan = 0, index = -1;
     do
-    {
-        printf("Menu penghapusan barang\n");
+    {   
         do
         {
-            printf("Silahkan cari kode barang (Contoh: T001) : ");
-            fgets(kode, sizeof(kode), stdin);
-            kode[strcspn(kode, "\n")] = '\0';
-        } while (!validasiIsi(kode));
-        for (int i = 0; i < length; i++)
-        {
-            if (strcmp(produk[i].id, kode) == 0){
-                
+            printf("Menu penghapusan barang\n");
+            do
+            {
+                printf("Silahkan cari kode barang (Contoh: T001) : ");
+                fgets(kode, sizeof(kode), stdin);
+                kode[strcspn(kode, "\n")] = '\0';
+            } while (!validasiIsi(kode));
+            for (int i = 0; i < length; i++)
+            {
+                if (strcmp(produk[i].id, kode) == 0){
+                printf("============================= BARANG DITEMUKAN =====================================\n");
+                printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
+                printf("| %-5s | %-30s | %-8s | Rp %-6d \t| %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
+                printf("====================================================================================\n");
+                ditemukan = 1;
+                index = i;
+                }
             }
+            do
+            {
+                printf("Apakah kamu ingin menghapus data ini?\n");
+                printf("1 Ya / 0 Tidak\n");
+                printf("Pilihanmu : ");
+                fgets(pilihanChar, sizeof(pilihanChar), stdin);
+                pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
+            } while (!validasiInteger(pilihanChar, &pilihanInt));
+        } while (pilihanInt != 1);
+        for(int i=index; i<length-1; i++) {
+            produk[i] = produk[i+1];
         }
-        
-        
+        length--;
+        printf("Barang berhasil di hapus!\n");
+        validasi = 0;
+        do
+        {
+            do
+            {
+                printf("Apakah kamu ingin menghapus barang lagi?\n");
+                printf("1 Ya / 0 Tidak\n");
+                printf("Pilihanmu : ");
+                fgets(pilihanChar, sizeof(pilihanChar), stdin);
+                pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
+            } while (!validasiInteger(pilihanChar, &pilihanInt));
+            switch (pilihanInt)
+            {
+            case 1:
+                validasi = 1;
+                system("cls");
+                printf("Melakukan penghapusan barang lagi...\n");
+                break;
+            case 0:
+                validasi = 1;
+                system("cls");
+                printf("Kembali ke menu database\n");
+                break;
+            default:
+                validasi = 0;
+                system("cls");
+                printf("Tidak ada pilihan tersebut!\n");
+                break;
+            }
+        } while (validasi != 1);
     } while (pilihanInt != 0);
     
 }

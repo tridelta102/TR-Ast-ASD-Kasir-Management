@@ -112,7 +112,6 @@ void tampilkanLogin(char *usernameLolos) {
         scanf("%s", password); 
         while (getchar() != '\n'); 
         
-        // Pengecekan 4 Akun Berbeda
         if ((strcmp(usernameLolos, "Kenji") == 0 && strcmp(password, "672025046") == 0) ||
             (strcmp(usernameLolos, "Hans") == 0 && strcmp(password, "672025047") == 0) ||
             (strcmp(usernameLolos, "Theo") == 0 && strcmp(password, "672025093") == 0) ||

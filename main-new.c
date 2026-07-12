@@ -3,7 +3,6 @@
 #include <string.h>
 int menuDatabase();
 int menuKasir();
-/* ===== {NTAN} TAMBAHAN FITUR STRUK BELANJA ===== */
 void cetakStruk();
 int main();
 
@@ -480,7 +479,7 @@ int menuDatabase(){
 }
 
 
-/* ===== {NTAN} TAMBAHAN BARU: FUNGSI CETAK STRUK KE FILE struk.txt ===== */
+/* membuat struk.txt */
 void cetakStruk(){
     FILE *fp = fopen("struk.txt", "w");
 
@@ -529,7 +528,6 @@ int menuKasir(){
         printf("Selamat datang di menu kasir\n");
         printf("1 - Tambahkan Keranjang\n");
         printf("2 - Lihat dan Konfirmasi Beli\n");
-        /* ===== TAMBAHAN BARU: MENU CETAK STRUK ===== */
         printf("99 - Kembali Ke Menu Utama\n");
         printf("Pilih : ");
         scanf("%d", &input);

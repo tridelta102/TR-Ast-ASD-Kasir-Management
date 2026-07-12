@@ -806,58 +806,63 @@ int editBarang(){
                 printf("Edit nama : ");
                 fgets(nama, sizeof(nama), stdin);
                 nama[strcspn(nama, "\n")] = '\0';
-                bunyiBeep();
             } while (!validasiIsi(nama));
+            bunyiBeep();
             do
             {
                 printf("Edit kategori : ");
                 fgets(kategori, sizeof(kategori), stdin);
                 kategori[strcspn(kategori, "\n")] = '\0';
-                bunyiBeep();
             } while (!validasiIsi(kategori));
+            bunyiBeep();
             do
             {
                 printf("Edit harga : ");
                 fgets(hargaChar, sizeof(hargaChar), stdin);
                 hargaChar[strcspn(hargaChar, "\n")] = '\0';
-                bunyiBeep();
                 if (strcmp(hargaChar, "-") == 0)
                 {
                     break;
-                }
-                
+                }    
             } while (!validasiInteger(hargaChar, &hargaInt));
+            bunyiBeep();
             do
             {
                 printf("Edit kuantitas : ");
                 fgets(kuanChar, sizeof(kuanChar), stdin);
                 kuanChar[strcspn(kuanChar, "\n")] = '\0';
-                bunyiBeep();
                 if (strcmp(kuanChar, "-") == 0)
                 {
                     break;
                 }
             } while (!validasiInteger(kuanChar, &kuanInt));
+            bunyiBeep();
+
+                printf("====================================== BARANG ======================================\n");
+                printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
+                printf("| %-5s ", kode);
+                
                 if (strcmp(nama, "-") == 0){
-                    printf("Nama : Tidak Berubah\n");
+                    printf("| %-30s ", "Tidak Berubah");
                 } else {
-                    printf("Nama : %s\n", nama);
+                    printf("| %-30s ", nama);
                 }
                 if (strcmp(kategori, "-") == 0){
-                    printf("Kategori : Tidak Berubah\n");
+                    printf("| %-8s ", "Tidak Berubah");
                 } else {
-                    printf("Kategori : %s\n", kategori);
+                    printf("| %-8s ", kategori);
                 }
                 if (strcmp(hargaChar, "-") == 0){
-                    printf("Harga : Tidak Berubah\n");
+                    printf("| %-6s \t", "Tidak Berubah");
                 } else {
-                    printf("Harga : %d\n", hargaInt);
+                    printf("| Rp %-6d \t", hargaInt);
                 }
                 if (strcmp(kuanChar, "-") == 0){
-                    printf("Kuantitas : Tidak Berubah\n");
+                    printf("| %-12s ", "Tidak Berubah");
                 } else {
-                    printf("Kuantitas : %d\n", kuanInt);
+                    printf("| %-12d |\n", kuanInt);
                 }
+                printf("====================================================================================\n");
             do {
                 do
                 {
@@ -867,15 +872,17 @@ int editBarang(){
                     fgets(pilihanChar, sizeof(pilihanChar), stdin);
                     pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
                 } while (!validasiInteger(pilihanChar, &pilihanInt));
-                bunyiBeep();
                 switch (pilihanInt)
                 {
                 case 1:
+                    bunyiBeep();
                     break;
                 case 0:
+                    bunyiBeep();
                     system("cls");
                     break;
                 default:
+                    bunyiError();
                     system("cls");
                     printf("Tidak ada pilihan seperti itu!\n");
                     break;
@@ -907,18 +914,19 @@ int editBarang(){
                 fgets(pilihanChar, sizeof(pilihanChar), stdin);
                 pilihanChar[strcspn(pilihanChar, "\n")] = '\0';
             } while (!validasiInteger(pilihanChar, &pilihanInt));
-            bunyiBeep();
-
+            
             switch (pilihanInt)
             {
             case 1:
                 validasi = 1;
                 index = -1;
+                bunyiBeep();
                 system("cls");
                 printf("Melakukan pengeditan barang lagi...\n");
                 break;
             case 0:
                 validasi = 1;
+                bunyiBeep();
                 system("cls");
                 printf("Kembali ke menu database\n");
                 break;

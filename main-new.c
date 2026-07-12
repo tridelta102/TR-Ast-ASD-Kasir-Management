@@ -1,10 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h> // Untuk Sleep() dan Beep()
-#include <time.h>    // Untuk waktu di menu login
+#include <windows.h>
+#include <time.h>
 
-// --- DEKLARASI FUNGSI ---
 int menuDatabase();
 int menuKasir();
 void cetakStruk();
@@ -16,7 +15,6 @@ void tampilkanAnggota();
 void bunyiBeep();
 void bunyiError();
 
-// --- STRUKTUR DATA ---
 struct item{
     char id[5];
     char nama[30];
@@ -190,7 +188,10 @@ int validasiInteger(char inputChar[], int *outputInteger){
 int tambahkeranjang(){
     int k = 0;
     char cari[5];
-    int input, j;
+    int input, j, l, p = 0;
+
+    //keranjang[0] menyimpan index (i)
+    //keranjang[1] menyimpan jumlah
 
     printf("\nMasukkan ID Produk: ");
     scanf(" %4[^\n]", cari);
@@ -198,24 +199,45 @@ int tambahkeranjang(){
 
     for(int i = 0; i < length; i++){
         if(strcmp(cari,produk[i].id) == 0){
+
             printf("Masukkan Jumlah: ");
             scanf("%d", &j);
             while (getchar() != '\n'); 
             
-            if(produk[i].kuan >= j){
-                keranjang[0][z] = i;
-                keranjang[1][z] = j;
-                z++;
-                k++;
-                bunyiBeep();
-                printf("Produk berhasil dimasukkan ke keranjang!\n");
-                break;
-            } else {
-                bunyiError();
-                printf("Stok tidak cukup.. Tekan Enter untuk Kembali...");
-                while (getchar() != '\n'); 
-                getchar();
-                return 0; 
+            for(int x = 0; x <= z; x++){
+                if(i == keranjang[0][x]){
+                    l = keranjang[1][x] + j;
+                    if(produk[i].kuan < l){
+                        bunyiError();
+                        printf("Stok tidak cukup.. Tekan Enter untuk Kembali...");
+                        while (getchar() != '\n'); 
+                        return 0; 
+                    };
+                    keranjang[0][x] = i;
+                    keranjang[1][x] = l;
+                    p++;
+                    z++;
+                    k++;
+                    bunyiBeep();
+                    printf("Produk berhasil ditambahkan!\n");
+                    break;
+                };
+            }
+            if(p == 0){
+                if(produk[i].kuan >= j){
+                    keranjang[0][z] = i;
+                    keranjang[1][z] = j;
+                    z++;
+                    k++;
+                    bunyiBeep();
+                    printf("Produk berhasil dimasukkan ke keranjang!\n");
+                    break;
+                } else {
+                    bunyiError();
+                    printf("Stok tidak cukup.. Tekan Enter untuk Kembali...");
+                    while (getchar() != '\n'); 
+                    return 0; 
+                };
             };
         };   
     };
@@ -303,6 +325,10 @@ int beli(){
 
 void cetakStruk(){
     FILE *fp = fopen("struk.txt", "w");
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    char timeStr[50];
+    strftime(timeStr, sizeof(timeStr), "%a %b %d %H:%M:%S %Y", &tm);
 
     if(fp == NULL){
         bunyiError();
@@ -334,11 +360,12 @@ void cetakStruk(){
 
     fprintf(fp, "----------------------------------------------\n");
     fprintf(fp, "TOTAL BELANJA : Rp %d\n", totalBelanja);
+    fprintf(fp, " %s\n", timeStr);
 
     fclose(fp);
 
     bunyiBeep();
-    printf("Struk berhasil dibuat: struk.txt\n");
+    printf("\nPembelian Berhasil!\nStruk berhasil dibuat: struk.txt\n");
     printf("Tekan Enter untuk kembali...");
     getchar();
 }
@@ -399,23 +426,6 @@ void tampilkategori(char x[10]){
     bunyiBeep();
 }
 
-int tampilBarangSementara (){
-    system("cls");
-    printf("Menampilkan barang-barang\n");
-    printf("================================ BARANG ========================================\n");
-    printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
-    for (int i = 0; i < length; i++)
-    {
-        if(produk[i].id[0] != '\0'){
-            printf("| %-5s | %-30s | %-8s | Rp %-6d \t| %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
-        }
-    }
-    printf("====================================================================================\n");
-    printf("Tekan Enter untuk kembali...");
-    getchar();
-    bunyiBeep();
-    return 0;
-}
 
 int tambahBarang(){
     char kode[10], nama[50], kategori[20], hargaChar[10], kuanChar[10], pilihanChar[10];
@@ -432,6 +442,9 @@ int tambahBarang(){
                     fgets(kode, sizeof(kode), stdin);
                     kode[strcspn(kode, "\n")] = '\0';
                 } while (!validasiIsi(kode));
+
+                validasi = 1;
+
                 for (int i = 0; i < length; i++)
                 {
                     if (strcmp(produk[i].id, kode) == 0)
@@ -600,7 +613,6 @@ int hapusBarang(){
             for(int i=index; i<length-1; i++) {
                 produk[i] = produk[i+1];
             }
-            // Kosongkan elemen terakhir
             produk[length-1].id[0] = '\0';
             bunyiBeep();
             printf("Barang berhasil di hapus!\n");
@@ -639,6 +651,24 @@ int hapusBarang(){
             }
         } while (validasi != 1);
     } while (pilihanInt != 0);
+    return 0;
+}
+
+int tampilBarangSementara (){
+    system("cls");
+    printf("Menampilkan barang-barang\n");
+    printf("================================ BARANG ========================================\n");
+    printf("| Kode  | Nama Produk                    | Kategori | Harga     | Jumlah Stok  |\n");
+    for (int i = 0; i < length; i++)
+    {
+        if(produk[i].id[0] != '\0'){
+            printf("| %-5s | %-30s | %-8s | Rp %-6d \t| %-12d |\n", produk[i].id, produk[i].nama, produk[i].kategori, produk[i].harga, produk[i].kuan);
+        }
+    }
+    printf("====================================================================================\n");
+    printf("Tekan Enter untuk kembali...");
+    getchar();
+    bunyiBeep();
     return 0;
 }
 

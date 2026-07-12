@@ -100,7 +100,7 @@ void tampilkanLogin(char *usernameLolos) {
         printf("          ============================================================\n");
         printf("                                  MENU LOGIN                          \n");
         printf("          ============================================================\n");
-        printf("          ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><\n");
+        printf("                             SISTEM KOPERASI DESA                     \n");
         printf("          ============================================================\n\n\n");
         
         printf("                      USERNAME : ");
@@ -112,16 +112,21 @@ void tampilkanLogin(char *usernameLolos) {
         scanf("%s", password); 
         while (getchar() != '\n'); 
         
-        if (strcmp(password, "admin123") == 0) {
+        // Pengecekan 4 Akun Berbeda
+        if ((strcmp(usernameLolos, "Kenji") == 0 && strcmp(password, "672025046") == 0) ||
+            (strcmp(usernameLolos, "Hans") == 0 && strcmp(password, "672025047") == 0) ||
+            (strcmp(usernameLolos, "Theo") == 0 && strcmp(password, "672025093") == 0) ||
+            (strcmp(usernameLolos, "Nathan") == 0 && strcmp(password, "672025101") == 0)) {
+            
             bunyiBeep();
             loginSukses = 1; 
         } else {
             bunyiError();
-            printf("\n                      [!] PASSWORD SALAH! Silakan coba lagi.\n");
+            printf("\n                      [!] USERNAME ATAU PASSWORD SALAH! Silakan coba lagi.\n");
             Sleep(1500); 
         }
 
-    } while (loginSukses == 0);
+} while (loginSukses == 0);
 
     printf("\n\n");
     printf("          ============================================================\n");
